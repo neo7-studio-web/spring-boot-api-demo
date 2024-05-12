@@ -1,4 +1,4 @@
-package com.openclassrooms.api.exception;
+package com.openclassrooms.api.handler;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
