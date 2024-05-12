@@ -1,10 +1,12 @@
 package com.openclassrooms.api.controller;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import org.json.JSONObject;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
 import com.openclassrooms.api.model.Employee;
 import com.openclassrooms.api.service.EmployeeService;
 
@@ -55,11 +58,7 @@ public class EmployeeController {
   @GetMapping("/{id}")
   public Employee getEmployee(@PathVariable("id") final Long id) {
     Optional<Employee> employee = employeeService.getEmployee(id);
-    if (employee.isPresent()) {
-      return employee.get();
-    } else {
-      return null;
-    }
+    return employee.orElseThrow(() -> new NoSuchElementException("No employee found with this id: " + id));
   }
 
   /**
@@ -80,34 +79,16 @@ public class EmployeeController {
    * @return
    */
   @PutMapping("/{id}")
-  public Employee updateEmployee(@PathVariable("id") final Long id, @RequestBody Employee employee) {
+  public Employee updateEmployee(@PathVariable("id") final Long id, @Valid @RequestBody Employee employee) {
     Optional<Employee> e = employeeService.getEmployee(id);
-    if (e.isPresent()) {
-      Employee currentEmployee = e.get();
+    Employee currentEmployee = e
+        .orElseThrow(() -> new NoSuchElementException("Cannot edit employee. No employee found with this id: " + id));
 
-      String firstName = employee.getFirstName();
-      if (firstName != null) {
-        currentEmployee.setFirstName(firstName);
-      }
-      String lastName = employee.getLastName();
-      if (lastName != null) {
-        currentEmployee.setLastName(lastName);
-        ;
-      }
-      String mail = employee.getMail();
-      if (mail != null) {
-        currentEmployee.setMail(mail);
-      }
-      String password = employee.getPassword();
-      if (password != null) {
-        currentEmployee.setPassword(password);
-        ;
-      }
-      employeeService.saveEmployee(currentEmployee);
-      return currentEmployee;
-    } else {
-      return null;
-    }
+    currentEmployee.setFirstName(employee.getFirstName());
+    currentEmployee.setLastName(employee.getLastName());
+    currentEmployee.setMail(employee.getMail());
+    currentEmployee.setPassword(employee.getPassword());
+    return employeeService.saveEmployee(currentEmployee);
   }
 
   /**
@@ -124,22 +105,29 @@ public class EmployeeController {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
 
-    JSONObject jo = new JSONObject();
-    jo.put("message", "Validation failed");
+    Gson gson = new Gson();
+    Map<String, Object> message = new LinkedHashMap<>();
+    message.put("message", "Validation failed");
 
-    // ALL ERRORS
     List<String> details = new ArrayList<>();
     for (ObjectError error : ex.getBindingResult().getAllErrors()) {
       details.add(error.getDefaultMessage());
     }
+    message.put("details", details);
 
-    // FIRST ERROR ONLY (but random order ....)
-    // List<ObjectError> errors = ex.getBindingResult().getAllErrors();
-    // String details = errors.get(0).getDefaultMessage();
+    return new ResponseEntity<String>(gson.toJson(message), HttpStatus.BAD_REQUEST);
+  }
 
-    jo.put("details", details);
+  @ResponseStatus(HttpStatus.NOT_FOUND)
+  @ExceptionHandler(NoSuchElementException.class)
+  public ResponseEntity<?> handleNotFoundExceptions(NoSuchElementException ex) {
 
-    return new ResponseEntity(jo.toString(), HttpStatus.BAD_REQUEST);
+    Gson gson = new Gson();
+    Map<String, Object> message = new LinkedHashMap<>();
+    message.put("message", "Entity not found");
+    message.put("details", ex.getMessage());
+
+    return new ResponseEntity<String>(gson.toJson(message), HttpStatus.NOT_FOUND);
   }
 
 }
