@@ -1,23 +1,14 @@
 package com.openclassrooms.api.controller;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.Gson;
 import com.openclassrooms.api.model.Employee;
 import com.openclassrooms.api.service.EmployeeService;
 
@@ -26,7 +17,6 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -98,36 +88,9 @@ public class EmployeeController {
    */
   @DeleteMapping("/{id}")
   public void deleteEmployee(@PathVariable("id") final Long id) {
+    Optional<Employee> e = employeeService.getEmployee(id);
+    e.orElseThrow(() -> new NoSuchElementException("Cannot delete employee. No employee found with this id: " + id));
     employeeService.deleteEmployee(id);
-  }
-
-  @ResponseStatus(HttpStatus.BAD_REQUEST)
-  @ExceptionHandler(MethodArgumentNotValidException.class)
-  public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
-
-    Gson gson = new Gson();
-    Map<String, Object> message = new LinkedHashMap<>();
-    message.put("message", "Validation failed");
-
-    List<String> details = new ArrayList<>();
-    for (ObjectError error : ex.getBindingResult().getAllErrors()) {
-      details.add(error.getDefaultMessage());
-    }
-    message.put("details", details);
-
-    return new ResponseEntity<String>(gson.toJson(message), HttpStatus.BAD_REQUEST);
-  }
-
-  @ResponseStatus(HttpStatus.NOT_FOUND)
-  @ExceptionHandler(NoSuchElementException.class)
-  public ResponseEntity<?> handleNotFoundExceptions(NoSuchElementException ex) {
-
-    Gson gson = new Gson();
-    Map<String, Object> message = new LinkedHashMap<>();
-    message.put("message", "Entity not found");
-    message.put("details", ex.getMessage());
-
-    return new ResponseEntity<String>(gson.toJson(message), HttpStatus.NOT_FOUND);
   }
 
 }
