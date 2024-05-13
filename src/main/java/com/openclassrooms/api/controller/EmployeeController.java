@@ -2,9 +2,7 @@ package com.openclassrooms.api.controller;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,7 +33,6 @@ public class EmployeeController {
    */
   @PostMapping("/")
   public Employee createEmployee(@Valid @RequestBody Employee employee) {
-    ResponseEntity.ok(employee);
     return employeeService.saveEmployee(employee);
   }
 
@@ -78,6 +75,7 @@ public class EmployeeController {
     currentEmployee.setLastName(employee.getLastName());
     currentEmployee.setMail(employee.getMail());
     currentEmployee.setPassword(employee.getPassword());
+    currentEmployee.setWards(employee.getWards());
     return employeeService.saveEmployee(currentEmployee);
   }
 

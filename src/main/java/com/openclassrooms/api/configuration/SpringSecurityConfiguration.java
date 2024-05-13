@@ -10,6 +10,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer.FrameOptionsConfig;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -34,9 +35,13 @@ public class SpringSecurityConfiguration {
     return http.authorizeHttpRequests(auth -> {
       auth.requestMatchers("/admin").hasRole("ADMIN");
       auth.requestMatchers("/user").hasRole("USER");
+      auth.requestMatchers("/h2-console/**").permitAll(); // Access to H2 console
       auth.anyRequest().authenticated();
     })
         // .formLogin(Customizer.withDefaults()) // Comment for an api (no login page)
+        .headers(header -> {
+          header.frameOptions(FrameOptionsConfig::sameOrigin);
+        }) // For H2 console iFrames
         .httpBasic(Customizer.withDefaults()) // Comment if login form. Used for /login route
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Api = stateless
         .csrf(csrf -> csrf.disable()) // Uncomment for an api to allow POST, PUT...
