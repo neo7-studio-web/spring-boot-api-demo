@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.openclassrooms.api.model.Employee;
@@ -41,7 +40,15 @@ public class EmployeeService {
     }
     employee.setWards(savedWards);
     Employee savedEmployee = employeeRepository.save(employee);
-    ResponseEntity.ok(employee);
     return savedEmployee;
+  }
+
+  public Employee copyEmployee(Employee fromEmployee, Employee toEmployee) {
+    toEmployee.setFirstName(fromEmployee.getFirstName());
+    toEmployee.setLastName(fromEmployee.getLastName());
+    toEmployee.setMail(fromEmployee.getMail());
+    toEmployee.setPassword(fromEmployee.getPassword());
+    toEmployee.setWards(fromEmployee.getWards());
+    return toEmployee;
   }
 }

@@ -61,22 +61,16 @@ public class EmployeeController {
   /**
    * Update - Update an existing employee
    * 
-   * @param id       - The id of the employee to update
-   * @param employee - The employee object updated
+   * @param id              - The id of the employee to update
+   * @param updatedEmployee - The employee object updated
    * @return
    */
   @PutMapping("/{id}")
-  public Employee updateEmployee(@PathVariable("id") final Long id, @Valid @RequestBody Employee employee) {
+  public Employee updateEmployee(@PathVariable("id") final Long id, @Valid @RequestBody Employee updatedEmployee) {
     Optional<Employee> e = employeeService.getEmployee(id);
     Employee currentEmployee = e
         .orElseThrow(() -> new NoSuchElementException("Cannot edit employee. No employee found with this id: " + id));
-
-    currentEmployee.setFirstName(employee.getFirstName());
-    currentEmployee.setLastName(employee.getLastName());
-    currentEmployee.setMail(employee.getMail());
-    currentEmployee.setPassword(employee.getPassword());
-    currentEmployee.setWards(employee.getWards());
-    return employeeService.saveEmployee(currentEmployee);
+    return employeeService.saveEmployee(employeeService.copyEmployee(updatedEmployee, currentEmployee));
   }
 
   /**
