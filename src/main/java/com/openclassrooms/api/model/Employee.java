@@ -3,8 +3,6 @@ package com.openclassrooms.api.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -51,7 +49,6 @@ public class Employee {
   private String password;
 
   @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
-  @JsonIgnore // Used to hide in the JSON Response
   private Set<Ward> wards = new HashSet<>();
 
   public void addWard(Ward ward) {

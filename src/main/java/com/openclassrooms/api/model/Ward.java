@@ -1,5 +1,7 @@
 package com.openclassrooms.api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,5 +26,6 @@ public class Ward {
   private String name;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "employee_id")
+  @JsonIgnore // Used to hide in the JSON Response
   private Employee employee;
 }
