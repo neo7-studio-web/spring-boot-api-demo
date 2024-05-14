@@ -16,11 +16,7 @@ public class EmployeeService {
   private EmployeeRepository employeeRepository;
 
   public Optional<Employee> getEmployee(final Long id) {
-    Optional<Employee> employee = employeeRepository.findById(id);
-    if (employee.isPresent()) { // Remove cascade link
-      employee.get().getWards().forEach(w -> w.setEmployee(null));
-    }
-    return employee;
+    return employeeRepository.findById(id);
   }
 
   public Iterable<Employee> getEmployees() {
