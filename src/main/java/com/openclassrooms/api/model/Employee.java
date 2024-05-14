@@ -48,6 +48,16 @@ public class Employee {
   @NotBlank(message = "Password is required")
   private String password;
 
-  @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
   private Set<Ward> wards = new HashSet<>();
+
+  public void addWard(Ward ward) {
+    ward.setEmployee(this);
+    this.wards.add(ward);
+  }
+
+  public void removeWard(Ward ward) {
+    ward.setEmployee(null);
+    this.wards.remove(ward);
+  }
 }
