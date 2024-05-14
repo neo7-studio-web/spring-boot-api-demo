@@ -3,6 +3,7 @@ package com.openclassrooms.api.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,10 +16,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "employees")
 @NoArgsConstructor
@@ -45,6 +48,6 @@ public class Employee {
   @NotBlank(message = "Password is required")
   private String password;
 
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private Set<Ward> wards = new HashSet<>();
 }
