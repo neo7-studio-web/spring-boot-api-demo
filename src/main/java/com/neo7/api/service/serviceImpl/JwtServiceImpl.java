@@ -1,4 +1,4 @@
-package com.openclassrooms.api.service.serviceImpl;
+package com.neo7.api.service.serviceImpl;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -11,7 +11,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import com.openclassrooms.api.service.JwtService;
+import com.neo7.api.service.JwtService;
 
 @Service
 public class JwtServiceImpl implements JwtService {

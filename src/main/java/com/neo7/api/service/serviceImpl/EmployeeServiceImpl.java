@@ -1,14 +1,14 @@
-package com.openclassrooms.api.service.serviceImpl;
+package com.neo7.api.service.serviceImpl;
 
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.openclassrooms.api.model.Employee;
-import com.openclassrooms.api.model.Ward;
-import com.openclassrooms.api.repository.EmployeeRepository;
-import com.openclassrooms.api.service.EmployeeService;
+import com.neo7.api.model.Employee;
+import com.neo7.api.model.Ward;
+import com.neo7.api.repository.EmployeeRepository;
+import com.neo7.api.service.EmployeeService;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {

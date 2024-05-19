@@ -1,4 +1,4 @@
-package com.openclassrooms.api.configuration;
+package com.neo7.api.configuration;
 
 import javax.crypto.spec.SecretKeySpec;
 

@@ -1,4 +1,4 @@
-package com.openclassrooms.api.configuration;
+package com.neo7.api.configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.openclassrooms.api.model.DBUser;
-import com.openclassrooms.api.repository.DBUserRepository;
+import com.neo7.api.model.DBUser;
+import com.neo7.api.repository.DBUserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

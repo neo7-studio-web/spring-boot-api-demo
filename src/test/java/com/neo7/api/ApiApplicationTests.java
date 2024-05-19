@@ -1,4 +1,4 @@
-package com.openclassrooms.api;
+package com.neo7.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

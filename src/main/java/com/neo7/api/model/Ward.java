@@ -1,4 +1,4 @@
-package com.openclassrooms.api.model;
+package com.neo7.api.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -1,4 +1,4 @@
-package com.openclassrooms.api.handler;
+package com.neo7.api.handler;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;

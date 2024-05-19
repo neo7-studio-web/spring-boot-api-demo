@@ -1,4 +1,4 @@
-package com.openclassrooms.api.controller;
+package com.neo7.api.controller;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.openclassrooms.api.model.Employee;
-import com.openclassrooms.api.service.EmployeeService;
+import com.neo7.api.model.Employee;
+import com.neo7.api.service.EmployeeService;
 
 import jakarta.validation.Valid;
 

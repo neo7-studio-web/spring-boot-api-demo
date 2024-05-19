@@ -1,4 +1,4 @@
-package com.openclassrooms.api.controller;
+package com.neo7.api.controller;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

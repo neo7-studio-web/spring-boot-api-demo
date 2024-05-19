@@ -1,11 +1,11 @@
-package com.openclassrooms.api.controller;
+package com.neo7.api.controller;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.openclassrooms.api.service.JwtService;
+import com.neo7.api.service.JwtService;
 
 @RestController
 public class LoginController {

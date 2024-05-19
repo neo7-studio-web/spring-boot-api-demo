@@ -1,8 +1,8 @@
-package com.openclassrooms.api.service;
+package com.neo7.api.service;
 
 import java.util.Optional;
 
-import com.openclassrooms.api.model.Employee;
+import com.neo7.api.model.Employee;
 
 public interface EmployeeService {
 
