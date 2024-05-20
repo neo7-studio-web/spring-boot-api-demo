@@ -60,4 +60,8 @@ public class Employee {
     ward.setEmployee(null);
     this.wards.remove(ward);
   }
+
+  public String toString() {
+    return this.firstName + " " + this.lastName + " <" + this.mail + ">";
+  }
 }

@@ -3,6 +3,8 @@ package com.neo7.api.controller;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,8 @@ public class EmployeeController {
   @Autowired
   private EmployeeService employeeService;
 
+  Logger logger = LoggerFactory.getLogger(EmployeeController.class);
+
   /**
    * Create - Add a new employee
    * 
@@ -33,6 +37,7 @@ public class EmployeeController {
    */
   @PostMapping("")
   public Employee createEmployee(@Valid @RequestBody Employee employee) {
+    logger.trace("Creating employee: " + employee);
     return employeeService.saveEmployee(employee);
   }
 
@@ -44,6 +49,7 @@ public class EmployeeController {
    */
   @GetMapping("/{id}")
   public Employee getEmployee(@PathVariable("id") final Long id) {
+    logger.trace("Retrieving employee with id: " + id);
     Optional<Employee> employee = employeeService.getEmployee(id);
     return employee.orElseThrow(() -> new NoSuchElementException("No employee found with this id: " + id));
   }
@@ -55,6 +61,7 @@ public class EmployeeController {
    */
   @GetMapping("/all")
   public Iterable<Employee> getEmployees() {
+    logger.trace("Retrieving all employees");
     return employeeService.getEmployees();
   }
 
@@ -67,6 +74,7 @@ public class EmployeeController {
    */
   @PutMapping("/{id}")
   public Employee updateEmployee(@PathVariable("id") final Long id, @Valid @RequestBody Employee updatedEmployee) {
+    logger.trace("Updating employee with id: " + id);
     Optional<Employee> e = employeeService.getEmployee(id);
     Employee currentEmployee = e
         .orElseThrow(() -> new NoSuchElementException("Cannot edit employee. No employee found with this id: " + id));
@@ -80,6 +88,7 @@ public class EmployeeController {
    */
   @DeleteMapping("/{id}")
   public void deleteEmployee(@PathVariable("id") final Long id) {
+    logger.trace("Deleting employee with id: " + id);
     Optional<Employee> e = employeeService.getEmployee(id);
     e.orElseThrow(() -> new NoSuchElementException("Cannot delete employee. No employee found with this id: " + id));
     employeeService.deleteEmployee(id);
