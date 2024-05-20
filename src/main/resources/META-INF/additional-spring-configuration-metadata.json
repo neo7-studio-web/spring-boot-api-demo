@@ -1,0 +1,5 @@
+{"properties": [{
+  "name": "neo7.security.jwtKey",
+  "type": "java.lang.String",
+  "description": "JWT private key used in Spring Security configuration"
+}]}
