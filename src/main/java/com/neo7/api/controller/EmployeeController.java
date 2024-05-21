@@ -40,9 +40,19 @@ public class EmployeeController {
    * @return The employee object saved
    */
   @PostMapping("")
-  public Employee createEmployee(@Valid @RequestBody Employee employee) {
+  public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
     logger.trace("Creating employee: " + employee);
-    return employeeService.saveEmployee(employee);
+    Employee createdEmployee = employeeService.saveEmployee(employee);
+    if (Objects.isNull(createdEmployee)) {
+      return ResponseEntity.noContent().build(); // 204
+    }
+    URI location = ServletUriComponentsBuilder
+        .fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(createdEmployee.getId())
+        .toUri();
+    logger.trace("Employee created. URI=" + location);
+    return ResponseEntity.created(location).build(); // 201 with created entity location
   }
 
   /**
@@ -72,28 +82,23 @@ public class EmployeeController {
   /**
    * Update - Update an existing employee
    * 
-   * @param id              - The id of the employee to update
-   * @param updatedEmployee - The employee object updated
+   * @param id               - The id of the employee to update
+   * @param employeeToUpdate - The employee object updated
    * @return
    */
   @PutMapping("/{id}")
   public ResponseEntity<Employee> updateEmployee(@PathVariable("id") final Long id,
-      @Valid @RequestBody Employee updatedEmployee) {
+      @Valid @RequestBody Employee employeeToUpdate) {
     logger.trace("Updating employee with id: " + id);
     Optional<Employee> e = employeeService.getEmployee(id);
     Employee currentEmployee = e
-        .orElseThrow(() -> new NoSuchElementException("Cannot edit employee. No employee found with this id: " + id));
-    Employee createdEmployee = employeeService
-        .saveEmployee(employeeService.copyEmployee(updatedEmployee, currentEmployee));
-    if (Objects.isNull(createdEmployee)) {
+        .orElseThrow(() -> new NoSuchElementException("Cannot update employee. No employee found with this id: " + id));
+    Employee updatedEmployee = employeeService
+        .saveEmployee(employeeService.copyEmployee(employeeToUpdate, currentEmployee));
+    if (Objects.isNull(updatedEmployee)) {
       return ResponseEntity.noContent().build(); // 204
     }
-    URI location = ServletUriComponentsBuilder
-        .fromCurrentRequest()
-        .path("/{id}")
-        .buildAndExpand(createdEmployee.getId())
-        .toUri();
-    return ResponseEntity.created(location).build(); // 201 with created entity location
+    return ResponseEntity.ok(updatedEmployee); // 200
   }
 
   /**
