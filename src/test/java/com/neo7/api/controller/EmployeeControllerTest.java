@@ -107,6 +107,7 @@ public class EmployeeControllerTest {
         .andExpect(status().isCreated())
         .andExpect(header().exists("Location"))
         .andReturn().getResponse().getHeader("Location");
+    @SuppressWarnings("null")
     int employeeId = Integer.parseInt(newEmployeeURIasString.substring(newEmployeeURIasString.lastIndexOf("/") + 1));
 
     // Get the created employee
