@@ -28,4 +28,8 @@ public class Ward {
   @JoinColumn(name = "employee_id")
   @JsonIgnore // Used to hide in the JSON Response
   private Employee employee;
+
+  public Ward(String name) {
+    this.name = name;
+  }
 }
