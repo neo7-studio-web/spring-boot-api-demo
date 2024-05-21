@@ -3,6 +3,7 @@ package com.neo7.api.controller;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -100,10 +101,10 @@ public class EmployeeControllerTest {
 
       // Create an employee
       String newEmployeeJson = mockMvc
-          .perform(get("/employee").contentType(MediaType.APPLICATION_JSON)
+          .perform(post("/employee").contentType(MediaType.APPLICATION_JSON)
               .header("Authorization", "Bearer " + this.authToken).content(toJsonString(this.testEmployee)))
-          .andExpect(status().isOk())
-          .andExpect(jsonPath("$.firstName", is("Anita")))
+          .andExpect(status().isCreated())
+          .andExpect(header().exists("Location"))
           .andReturn().getResponse().getContentAsString();
       JSONObject jsonObject = new JSONObject(newEmployeeJson);
       int employeeId = jsonObject.getInt("id");

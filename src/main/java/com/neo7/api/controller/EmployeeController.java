@@ -1,11 +1,14 @@
 package com.neo7.api.controller;
 
+import java.net.URI;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.neo7.api.model.Employee;
 import com.neo7.api.service.EmployeeService;
@@ -73,12 +77,23 @@ public class EmployeeController {
    * @return
    */
   @PutMapping("/{id}")
-  public Employee updateEmployee(@PathVariable("id") final Long id, @Valid @RequestBody Employee updatedEmployee) {
+  public ResponseEntity<Employee> updateEmployee(@PathVariable("id") final Long id,
+      @Valid @RequestBody Employee updatedEmployee) {
     logger.trace("Updating employee with id: " + id);
     Optional<Employee> e = employeeService.getEmployee(id);
     Employee currentEmployee = e
         .orElseThrow(() -> new NoSuchElementException("Cannot edit employee. No employee found with this id: " + id));
-    return employeeService.saveEmployee(employeeService.copyEmployee(updatedEmployee, currentEmployee));
+    Employee createdEmployee = employeeService
+        .saveEmployee(employeeService.copyEmployee(updatedEmployee, currentEmployee));
+    if (Objects.isNull(createdEmployee)) {
+      return ResponseEntity.noContent().build(); // 204
+    }
+    URI location = ServletUriComponentsBuilder
+        .fromCurrentRequest()
+        .path("/{id}")
+        .buildAndExpand(createdEmployee.getId())
+        .toUri();
+    return ResponseEntity.created(location).build(); // 201 with created entity location
   }
 
   /**
