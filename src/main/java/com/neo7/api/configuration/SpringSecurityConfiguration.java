@@ -41,6 +41,7 @@ public class SpringSecurityConfiguration {
       auth.requestMatchers("/admin").hasRole("ADMIN");
       auth.requestMatchers("/user").hasRole("USER");
       auth.requestMatchers("/h2-console/**").permitAll(); // Access to H2 console
+      auth.requestMatchers("/swagger-ui/**").permitAll(); // Access to Swagger UI
       auth.anyRequest().authenticated();
     })
         // .formLogin(Customizer.withDefaults()) // Comment for an api (no login page)
